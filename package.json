@@ -1,0 +1,26 @@
+{
+  "name": "tguesdon-map-generator",
+  "version": "1.0.0",
+  "description": "A map generator for games ( without renderer )",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "node ./build/generator.js",
+    "viewer": "node ./build/viewer.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TGuesdon/tguesdon-map-generator.git"
+  },
+  "keywords": [
+    "game",
+    "map",
+    "generator"
+  ],
+  "author": "thomas guesdon",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TGuesdon/tguesdon-map-generator/issues"
+  },
+  "homepage": "https://github.com/TGuesdon/tguesdon-map-generator#readme"
+}

@@ -1,3 +1,3 @@
-import { generate } from "./build/generator"
+import { generate, Island, Point } from "./build/generator"
 
-export  { generate }
+export  { generate, Island, Point }

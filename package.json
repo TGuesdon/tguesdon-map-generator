@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "test": "node ./build/generator.js",
-    "viewer": "node ./build/viewer.js"
+    "viewer": "npm run start && node ./build/viewer.js",
+    "start": "npm run build && npm run test"
   },
   "repository": {
     "type": "git",
@@ -22,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/TGuesdon/tguesdon-map-generator/issues"
   },
-  "homepage": "https://github.com/TGuesdon/tguesdon-map-generator#readme"
+  "homepage": "https://github.com/TGuesdon/tguesdon-map-generator#readme",
+  "dependencies": {
+    "simplex-noise": "^4.0.1"
+  }
 }

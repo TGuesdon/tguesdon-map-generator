@@ -28,13 +28,10 @@ export type Point = {
  * @returns a {width} * {height} matrices with island elevation. x, y & elevation in [0,1]
  */
 export function generate(width: number, height: number) {
-    console.log(`Generating a ${width} x ${height} island`);
 
     // Add two to let space at start and end
     const cellWidth = 1 / (width + 2);
     const cellHeight = 1 / (height + 2);
-
-    console.log(`Cell size is ${cellWidth} x ${cellHeight}`);
 
     const island = new Island(cellWidth, cellHeight, width, height);
     
@@ -56,7 +53,6 @@ function applyNoise(island: Island, intensity: number = 1) {
 function applyAttenuation(island: Island){
     for(let x = 0; x < island.points.length; x++){
         for(let y = 0; y < island.points[x].length; y++){
-            //island.points[x][y].elevation += noise2D(x,y) * intensity;
             const xNorm = x / island.points.length * Math.PI;
             const yNorm = y / island.points[x].length * Math.PI;
 

@@ -1,3 +1,5 @@
 import { generate } from "./build/generator";
 
-module.exports = generate;
+export default {
+  generate
+};

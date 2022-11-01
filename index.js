@@ -1,5 +1,3 @@
 import { generate } from "./build/generator";
 
-export default {
-  generate
-};
+module.exports.generate = generate;

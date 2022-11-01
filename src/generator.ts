@@ -27,7 +27,7 @@ export type Point = {
  * @param height 
  * @returns a {width} * {height} matrices with island elevation. x, y & elevation in [0,1]
  */
-export function generate(width: number, height: number) {
+export function generate(width: number, height: number): Island {
 
     // Add two to let space at start and end
     const cellWidth = 1 / (width + 2);

@@ -1,4 +1,4 @@
-import { createNoise2D } from 'simplex-noise';
+import { createNoise3D } from 'simplex-noise';
 
 export class Island {
     public points: Point[][];
@@ -42,10 +42,10 @@ export function generate(width: number, height: number, intensity: number = 1): 
 }
 
 function applyNoise(island: Island, intensity: number = 1) {
-    const noise2D = createNoise2D();
+    const noise3D = createNoise3D();
     for(let x = 0; x < island.points.length; x++){
         for(let y = 0; y < island.points[x].length; y++){
-            island.points[x][y].elevation += ((1 + noise2D(x,y)) / 2) * intensity;
+            island.points[x][y].elevation += ((1 + noise3D(x,y, island.points[x][y].elevation)) / 2) * intensity;
         }
     }
 }

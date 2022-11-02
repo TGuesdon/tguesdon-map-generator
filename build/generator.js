@@ -31,10 +31,10 @@ function generate(width, height, intensity = 1) {
 }
 exports.generate = generate;
 function applyNoise(island, intensity = 1) {
-    const noise2D = (0, simplex_noise_1.createNoise2D)();
+    const noise3D = (0, simplex_noise_1.createNoise3D)();
     for (let x = 0; x < island.points.length; x++) {
         for (let y = 0; y < island.points[x].length; y++) {
-            island.points[x][y].elevation += ((1 + noise2D(x, y)) / 2) * intensity;
+            island.points[x][y].elevation += ((1 + noise3D(x, y, island.points[x][y].elevation)) / 2) * intensity;
         }
     }
 }

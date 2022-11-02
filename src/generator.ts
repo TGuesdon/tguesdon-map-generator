@@ -1,4 +1,4 @@
-import { createNoise3D } from 'simplex-noise';
+import { createNoise2D } from 'simplex-noise';
 
 export class Island {
     public points: Point[][];
@@ -24,10 +24,12 @@ export type Point = {
 /**
  * 
  * @param width 
- * @param height 
+ * @param height
+ * @param intensity ratio which multiply noise
+ * @param attenuation_type {"gate" | "sin"} function used to transform noise into an island. sin will make smoother island but they will all look circle. gate do a better job at keeping the randomness of the noise, but it can create some weird coast.
  * @returns a {width} * {height} matrices with island elevation. x, y & elevation in [0,1] * intensity
  */
-export function generate(width: number, height: number, intensity: number = 1): Island {
+export function generate(width: number, height: number, intensity: number = 1, attenuation_type: "gate" | "sin" = "sin"): Island {
 
     // Add two to let space at start and end
     const cellWidth = 1 / width;
@@ -36,16 +38,17 @@ export function generate(width: number, height: number, intensity: number = 1): 
     const island = new Island(cellWidth, cellHeight, width, height);
     
     applyNoise(island, intensity);
-    applyAttenuation(island);
+
+    attenuation_type === "sin" ? applyAttenuation(island) : applyGate(island);
 
     return island;
 }
 
 function applyNoise(island: Island, intensity: number = 1) {
-    const noise3D = createNoise3D();
+    const noise2D = createNoise2D();
     for(let x = 0; x < island.points.length; x++){
         for(let y = 0; y < island.points[x].length; y++){
-            island.points[x][y].elevation += ((1 + noise3D(x,y, island.points[x][y].elevation)) / 2) * intensity;
+            island.points[x][y].elevation += ((1 + noise2D(x,y)) / 2) * intensity;
         }
     }
 }
@@ -57,6 +60,17 @@ function applyAttenuation(island: Island){
             const yNorm = y / island.points[x].length * Math.PI;
 
             island.points[x][y].elevation *= (Math.sin(xNorm) * Math.sin(yNorm));
+        }
+    }
+}
+
+function applyGate(island: Island){
+        for(let x = 0; x < island.points.length; x++){
+        for(let y = 0; y < island.points[x].length; y++){
+            
+            const water = x < 2 || y < 2 || x > island.points.length - 3 || y > island.points[x].length - 3;
+
+            island.points[x][y].elevation = water ? 0 : island.points[x][y].elevation;
         }
     }
 }

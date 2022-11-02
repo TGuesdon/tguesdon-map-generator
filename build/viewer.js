@@ -5,7 +5,7 @@ const island = (0, generator_1.generate)(10, 10);
 island.points.forEach(points => {
     let row = "";
     points.forEach(point => {
-        row += (" | " + point.elevation);
+        row += Math.floor(point.elevation * 100.0) < 50 ? " x " : " o ";
     });
     console.log(row);
 });

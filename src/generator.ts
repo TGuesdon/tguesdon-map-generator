@@ -52,7 +52,7 @@ function applyNoise(island: Island, intensity: number = 1) {
     }
 }
 
-export function applyAttenuation(island: Island){
+function applyAttenuation(island: Island){
     for(let x = 0; x < island.points.length; x++){
         for(let y = 0; y < island.points[x].length; y++){
             const xNorm = x / island.points.length * Math.PI;

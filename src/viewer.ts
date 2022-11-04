@@ -1,11 +1,12 @@
-import { generate, Island, Point } from "./generator";
+import { generate, generateWCFIsland, Island, Point } from "./generator";
 
-const island: Island = generate(10,10);
+// const island: Island = generate(10,10);
+const island: Island = generateWCFIsland(10,10, 0.2);
 
 island.points.forEach(points => {
     let row = "";
     points.forEach(point => {
-        row += Math.floor(point.elevation * 100.0) < 50 ? " x " : " o ";
+        row += " | " + point.elevation + " | ";
     })
     console.log(row);
 })

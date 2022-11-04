@@ -32,3 +32,7 @@ generateWCFIslland returns a 2 dimensionnal array of points with x and y positio
  - width, height: number of points that must be generated.
  - allowedStep: step allowed between two tiles, must be in [0, 1]. 
  - possibleElevation: (optional) list of possible elevation for points. Default to [0, 0.2, 0.4, 0.6, 0.8, 1.0]. You can put multiple times one elevation to make it happens more. I would advice to stay in [0, 1].
+
+Here is an example of render with React Three Fiber :
+
+![island render with react three fiber](archipelago2.PNG)

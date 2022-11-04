@@ -162,9 +162,15 @@ function toIsland(island: WCFIsland): Island{
  * @param height
  * @param allowedStep step allowed between two tiles, must be in [0, 1]. 
  * @param possibleElevation list of possible elevation for points. Default to [0, 0.2, 0.4, 0.6, 0.8, 1.0]. You can put multiple times one elevation to make it happens more. I would advice to stay in [0, 1].
+ * @param attenuation apply optional sin function to the island. Make it more circular.
  * @returns a {width} * {height} matrices with island elevation. x, y & elevation in [0,1]
  */
-export function generateWCFIsland(width: number, height: number, allowedStep: number, possibleElevation = [0, 0.2, 0.4, 0.6, 0.8, 1.0]): Island{
+export function generateWCFIsland(width: number, height: number, allowedStep: number, possibleElevation = [0, 0.2, 0.4, 0.6, 0.8, 1.0], attenuation = false): Island{
     const island = waveCollapseIsland(width, height, allowedStep, possibleElevation);
-    return toIsland(island);
+
+    const res = toIsland(island);
+
+    if(attenuation) applyAttenuation(res);
+    
+    return res;
 }

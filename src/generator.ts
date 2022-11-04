@@ -74,11 +74,9 @@ function applyGate(island: Island){
     }
 }
 
-type elevation = 0 | 0.1 | 0.2 | 0.3 | 0.4 | 0.5 | 0.6 | 0.7 | 0.8 | 0.9 | 1.0;
-
 type WCFPoint = {
     elevation: number;
-    possibleElevation: elevation[];
+    possibleElevation: number[];
     index: number;
 }
 
@@ -86,19 +84,19 @@ class WCFIsland{
 
     points: WCFPoint[];
 
-    constructor(public width: number, public height: number){
+    constructor(public width: number, public height: number, possibleElevation: number[]){
         this.points = [];
         for(let y = 0; y < height; y++){
             for(let x = 0; x < width; x++){
                 // Change array to alter probability
-                this.points.push({elevation:-1, possibleElevation:[0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0], index: y * width + x});
+                this.points.push({elevation:-1, possibleElevation: possibleElevation, index: y * width + x});
             }
         }
     }
 
 }
 
-function observe(island: WCFIsland, index: number, width: number, elevation: elevation, allowedStep: elevation){
+function observe(island: WCFIsland, index: number, width: number, elevation: number, allowedStep: number){
     island.points[index].elevation = elevation;
     island.points[index].possibleElevation = [];
 
@@ -114,7 +112,7 @@ function observe(island: WCFIsland, index: number, width: number, elevation: ele
 
 }
 
-function initEdge(island: WCFIsland, width: number, height: number, allowedStep: elevation){
+function initEdge(island: WCFIsland, width: number, height: number, allowedStep: number){
     for(let y = 0; y < height; y++){
         for(let x = 0; x < width; x++){
             if(x === 0 || x === width - 1 || y === 0 || y === height - 1){
@@ -124,9 +122,9 @@ function initEdge(island: WCFIsland, width: number, height: number, allowedStep:
     }
 }
 
-function waveCollapseIsland(width: number, height: number, allowedStep: elevation): WCFIsland{
+function waveCollapseIsland(width: number, height: number, allowedStep: number, possibleElevation: number[]): WCFIsland{
 
-    const island = new WCFIsland(width, height)
+    const island = new WCFIsland(width, height, possibleElevation);
 
     initEdge(island, width, height, allowedStep);
 
@@ -164,9 +162,10 @@ function toIsland(island: WCFIsland): Island{
  * @param width 
  * @param height
  * @param allowedStep step allowed between two tiles, must be in [0, 1]. 
+ * @param possibleElevation list of possible elevation for points. Default to [0, 0.2, 0.4, 0.6, 0.8, 1.0]. You can put multiple times one elevation to make it happens more. I would advice to stay in [0, 1].
  * @returns a {width} * {height} matrices with island elevation. x, y & elevation in [0,1]
  */
-export function generateWCFIsland(width: number, height: number, allowedStep: elevation): Island{
-    const island = waveCollapseIsland(width, height, allowedStep);
+export function generateWCFIsland(width: number, height: number, allowedStep: number, possibleElevation = [0, 0.2, 0.4, 0.6, 0.8, 1.0]): Island{
+    const island = waveCollapseIsland(width, height, allowedStep, possibleElevation);
     return toIsland(island);
 }

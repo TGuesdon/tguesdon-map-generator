@@ -1,6 +1,6 @@
 {
   "name": "tguesdon-island-generator",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "An island generator for games ( without renderer )",
   "main": "build/generator.js",
   "types": "src/generator.ts",

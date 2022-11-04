@@ -57,19 +57,19 @@ function applyGate(island) {
     }
 }
 class WCFIsland {
-    constructor(width, height) {
+    constructor(width, height, possibleElevation) {
         this.width = width;
         this.height = height;
         this.points = [];
         for (let y = 0; y < height; y++) {
             for (let x = 0; x < width; x++) {
                 // Change array to alter probability
-                this.points.push({ elevation: -1, possibleElevation: [0, 0.2, 0.2, 0.4, 0.4, 0.4, 0.6, 0.6, 0.6, 0.8, 0.8, 1.0], index: y * width + x });
+                this.points.push({ elevation: -1, possibleElevation: possibleElevation, index: y * width + x });
             }
         }
     }
 }
-function observe(island, index, width, elevation) {
+function observe(island, index, width, elevation, allowedStep) {
     island.points[index].elevation = elevation;
     island.points[index].possibleElevation = [];
     const top = island.points[index - width];
@@ -77,31 +77,31 @@ function observe(island, index, width, elevation) {
     const right = island.points[index - 1];
     const left = island.points[index + 1];
     if (top)
-        top.possibleElevation = top.possibleElevation.filter((value) => !(Math.abs(elevation - value) > 0.4));
+        top.possibleElevation = top.possibleElevation.filter((value) => !(Math.abs(elevation - value) > allowedStep));
     if (bottom)
-        bottom.possibleElevation = bottom.possibleElevation.filter((value) => !(Math.abs(elevation - value) > 0.4));
+        bottom.possibleElevation = bottom.possibleElevation.filter((value) => !(Math.abs(elevation - value) > allowedStep));
     if (right)
-        right.possibleElevation = right.possibleElevation.filter((value) => !(Math.abs(elevation - value) > 0.4));
+        right.possibleElevation = right.possibleElevation.filter((value) => !(Math.abs(elevation - value) > allowedStep));
     if (left)
-        left.possibleElevation = left.possibleElevation.filter((value) => !(Math.abs(elevation - value) > 0.4));
+        left.possibleElevation = left.possibleElevation.filter((value) => !(Math.abs(elevation - value) > allowedStep));
 }
-function initEdge(island, width, height) {
+function initEdge(island, width, height, allowedStep) {
     for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
             if (x === 0 || x === width - 1 || y === 0 || y === height - 1) {
-                observe(island, y * width + x, width, 0);
+                observe(island, y * width + x, width, 0, allowedStep);
             }
         }
     }
 }
-function waveCollapseIsland(width, height) {
-    const island = new WCFIsland(width, height);
-    initEdge(island, width, height);
+function waveCollapseIsland(width, height, allowedStep, possibleElevation) {
+    const island = new WCFIsland(width, height, possibleElevation);
+    initEdge(island, width, height, allowedStep);
     let count = 0;
     const max = (width - 2) * (height - 2);
     while (count < max) {
         const min = island.points.filter((p) => p.elevation === -1).reduce((a, b) => a.possibleElevation.length < b.possibleElevation.length ? a : b);
-        observe(island, min.index, width, min.possibleElevation[Math.floor(Math.random() * min.possibleElevation.length)]);
+        observe(island, min.index, width, min.possibleElevation[Math.floor(Math.random() * min.possibleElevation.length)], allowedStep);
         console.log(min.index);
         count++;
     }
@@ -118,8 +118,17 @@ function toIsland(island) {
     }
     return res;
 }
-function generateWCFIsland(width, height) {
-    const island = waveCollapseIsland(width, height);
+/**
+ *
+ * @param width
+ * @param height
+ * @param allowedStep step allowed between two tiles, must be in [0, 1].
+ * @param possibleElevation list of possible elevation for points. Default to [0, 0.2, 0.4, 0.6, 0.8, 1.0]. You can put multiple times one elevation to make it happens more. I would advice to stay in [0, 1].
+ * @returns a {width} * {height} matrices with island elevation. x, y & elevation in [0,1]
+ */
+function generateWCFIsland(width, height, allowedStep, possibleElevation = [0, 0.2, 0.4, 0.6, 0.8, 1.0]) {
+    console.log(possibleElevation);
+    const island = waveCollapseIsland(width, height, allowedStep, possibleElevation);
     return toIsland(island);
 }
 exports.generateWCFIsland = generateWCFIsland;

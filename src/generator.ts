@@ -52,7 +52,7 @@ function applyNoise(island: Island, intensity: number = 1) {
     }
 }
 
-function applyAttenuation(island: Island){
+export function applyAttenuation(island: Island){
     for(let x = 0; x < island.points.length; x++){
         for(let y = 0; y < island.points[x].length; y++){
             const xNorm = x / island.points.length * Math.PI;
@@ -135,7 +135,6 @@ function waveCollapseIsland(width: number, height: number, allowedStep: number, 
 
         const min: WCFPoint = island.points.filter((p) => p.elevation === -1).reduce((a, b) => a.possibleElevation.length < b.possibleElevation.length ? a : b);
         observe(island, min.index, width, min.possibleElevation[Math.floor(Math.random() * min.possibleElevation.length)], allowedStep);
-        console.log(min.index);
         count ++;
     }
 

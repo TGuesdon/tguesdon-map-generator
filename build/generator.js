@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.generateWCFIsland = exports.generate = exports.Island = void 0;
+exports.generateWCFIsland = exports.applyAttenuation = exports.generate = exports.Island = void 0;
 const simplex_noise_1 = require("simplex-noise");
 class Island {
     constructor(cellWidth, cellHeight, width, height) {
@@ -48,6 +48,7 @@ function applyAttenuation(island) {
         }
     }
 }
+exports.applyAttenuation = applyAttenuation;
 function applyGate(island) {
     for (let x = 0; x < island.points.length; x++) {
         for (let y = 0; y < island.points[x].length; y++) {
@@ -102,7 +103,6 @@ function waveCollapseIsland(width, height, allowedStep, possibleElevation) {
     while (count < max) {
         const min = island.points.filter((p) => p.elevation === -1).reduce((a, b) => a.possibleElevation.length < b.possibleElevation.length ? a : b);
         observe(island, min.index, width, min.possibleElevation[Math.floor(Math.random() * min.possibleElevation.length)], allowedStep);
-        console.log(min.index);
         count++;
     }
     return island;
@@ -127,7 +127,6 @@ function toIsland(island) {
  * @returns a {width} * {height} matrices with island elevation. x, y & elevation in [0,1]
  */
 function generateWCFIsland(width, height, allowedStep, possibleElevation = [0, 0.2, 0.4, 0.6, 0.8, 1.0]) {
-    console.log(possibleElevation);
     const island = waveCollapseIsland(width, height, allowedStep, possibleElevation);
     return toIsland(island);
 }
